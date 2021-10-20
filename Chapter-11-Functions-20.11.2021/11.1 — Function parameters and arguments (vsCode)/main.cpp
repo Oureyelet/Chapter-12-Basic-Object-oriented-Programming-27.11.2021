@@ -30,8 +30,16 @@ int main()
     std::cout << "//////////////////////////////////////////////////////////////////" << '\n';
     //////////////////////////////////////////////////////////////////////////////////////////
     /*
-    
+    In the next three lessons, we’ll talk quite a bit about parameters and arguments, so let’s revisit those definitions 
+    before proceeding.
+
+    In common usage, the terms parameter and argument are often interchanged. However, for the purposes of further discussion, 
+    we will make a distinction between the two:
+
+    A function parameter (sometimes called a formal parameter) is a variable declared in the function declaration:
     */
+
+
 
    return 0;
 }
