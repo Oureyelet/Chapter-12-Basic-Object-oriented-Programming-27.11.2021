@@ -39,6 +39,27 @@ int main()
     A function parameter (sometimes called a formal parameter) is a variable declared in the function declaration:
     */
 
+    /*
+    void foo(int x);// declaration (function prototype) -- x is a parameter
+
+    void foo(int x)// definition (also a declaration) -- x is a parameter
+    {
+
+    }
+    */
+
+    /*
+    An argument (sometimes called an actual parameter) is the value that is passed to the function by the caller:
+
+    foo(6); // 6 is the argument passed to parameter x
+    foo(y+1);// the value of y+1 is the argument passed to parameter x
+    */
+
+    /*
+    When a function is called, all of the parameters of the function are created as variables, and the value of the 
+    arguments are copied into the parameters. For example:
+    */
+
 
 
    return 0;
