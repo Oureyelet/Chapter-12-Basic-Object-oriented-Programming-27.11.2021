@@ -99,9 +99,9 @@ public:
             return 1;
     }
     
-    pop()
+    void pop()
     {
-        stack.pop_back()
+        stack.pop_back();
     }
 
 };
