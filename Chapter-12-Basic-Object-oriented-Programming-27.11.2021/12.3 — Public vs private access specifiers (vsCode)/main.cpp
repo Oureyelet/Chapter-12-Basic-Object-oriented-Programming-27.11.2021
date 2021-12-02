@@ -1,4 +1,6 @@
 #include <iostream>
+#include <array>
+#include <vector>
 
 struct DateStruct// members are public by default
 {
@@ -64,10 +66,44 @@ public:
         std::cout << "<" << m_x << ", " << m_y << ", " << m_z << ">" << '\n'; 
     }
 
-    void isEqual()
+    bool isEqual(const Point3d& pt)
     {
-        
+       return (pt.m_x == m_x && pt.m_y == m_y && pt.m_z == m_z); 
     }
+};
+
+class Stack
+{
+private:
+
+    std::vector<int> stack{};
+    int size_of_the_stack{10};
+
+public:
+
+    void reset()
+    {
+        stack.clear();
+    }
+
+    bool push(int x)
+    {
+
+        if(stack.size() < size_of_the_stack)
+        {
+            stack.push_back(x);
+
+            return 0;
+        }
+        else
+            return 1;
+    }
+    
+    pop()
+    {
+        stack.pop_back()
+    }
+
 };
 
 int main()
@@ -263,6 +299,83 @@ int main()
 
     /*
     b) Add a function named isEqual() to your Point3d class. The following code should run correctly:
+    */
+    Point3d point1;
+    point1.setValues(1, 2, 3);
+
+    Point3d point2;
+    point2.setValues(1, 2, 3);
+
+    if(point1.isEqual(point2))
+    {
+        std::cout << "point1 and point2 are equal\n";
+    }
+    else
+    {
+        std::cout << "point1 and point2 are not equal\n";
+    }
+
+    Point3d point3;
+    point3.setValues(3, 4, 5);
+
+    if (point1.isEqual(point3))
+    {
+        std::cout << "point1 and point3 are equal\n";
+    }
+    else
+    {
+        std::cout << "point1 and point3 are not equal\n";
+    }
+
+
+    /*
+    Question #3
+
+    Now let’s try something a little more complex. Let’s write a class that implements a simple stack from scratch. 
+    Review lesson 11.8 -- The stack and the heap if you need a refresher on what a stack is.
+
+    The class should be named Stack, and should contain:
+
+        A private fixed array of integers of length 10.
+        A private integer to keep track of the size of the stack.
+        A public member function named reset() that sets the size to 0.
+        A public member function named push() that pushes a value on the stack. push() should return false if the array is 
+        already full, and true otherwise.
+        A public member function named pop() that pops a value off the stack and returns it. If there are no values on the 
+        stack, the code should exit via an assert.
+        A public member function named print() that prints all the values in the stack.
+
+    Make sure the following program executes correctly:
+
+    int main()
+    {
+        Stack stack;
+        stack.reset();
+
+        stack.print();
+
+        stack.push(5);
+        stack.push(3);
+        stack.push(8);
+        stack.print();
+
+        stack.pop();
+        stack.print();
+
+        stack.pop();
+        stack.pop();
+
+        stack.print();
+
+        return 0;
+    }
+
+    This should print:
+
+    ( )
+    ( 5 3 8 )
+    ( 5 3 )
+    ( )
     */
 
 
