@@ -1,6 +1,8 @@
 #include <iostream>
 #include <array>
 #include <vector>
+#include <cassert>
+#include <assert.h>
 
 struct DateStruct// members are public by default
 {
@@ -101,7 +103,22 @@ public:
     
     void pop()
     {
-        stack.pop_back();
+        if(stack.empty())
+            assert(1);
+        else
+            stack.pop_back();
+    }
+
+    void print()
+    {
+        std::cout << "( ";
+
+        for(auto& elements : stack)
+        {
+            std::cout << elements << ' ';
+        }
+        std::cout << " )";
+        std::cout << std::endl;
     }
 
 };
@@ -377,6 +394,25 @@ int main()
     ( 5 3 )
     ( )
     */
+
+    Stack stack;
+	stack.reset();
+
+	stack.print();
+
+	stack.push(5);
+    
+	stack.push(3);
+	stack.push(8);
+	stack.print();
+
+	stack.pop();
+	stack.print();
+
+	stack.pop();
+	stack.pop();
+
+	stack.print();
 
 
     return 0;
