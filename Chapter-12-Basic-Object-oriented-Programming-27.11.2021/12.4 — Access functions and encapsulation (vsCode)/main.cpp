@@ -36,6 +36,34 @@ public:
     int m_value3;
 };
 
+class OurString
+{
+private:
+    char *m_string;// we'll dynamically allocate our string here
+    int m_lenght;// we need to keep track of the string length
+
+public:
+    int getLenght() { return m_lenght; }// access function to get value of m_length
+};
+
+class Date
+{
+private:
+    int m_Year;
+    int m_Month;
+    int m_Day;
+
+public:
+    void setYear(int year) { m_Year = year; }
+    int getYear() { return m_Year; }
+
+    void setMonth(int month) { m_Month = month; }
+    int getMonth() { return m_Month; }
+
+    void setDay(int day) { m_Day = day; }
+    int getDay() { return m_Day; }
+};
+
 int main()
 {
     std::cout << "Hello World\n";
@@ -162,7 +190,130 @@ int main()
 
     std::cout << something.m_value1 << '\n';
 
+    /*
+    While this program works fine, what would happen if we decided to rename m_value1, or change its type? We’d break not 
+    only this program, but likely most of the programs that use class Something as well!
 
+    Encapsulation gives us the ability to change how classes are implemented without breaking all of the programs that use them.
+
+    Here is the encapsulated version of this class that uses functions to access m_value1:
+
+    https://www.learncpp.com/cpp-tutorial/access-functions-and-encapsulation/
+
+    Note that because we did not alter the prototypes of any functions in our class’s public interface, our program that 
+    uses the class continues to work without any changes.
+
+    Similarly, if gnomes snuck into your house at night and replaced the internals of your TV remote with a different (but 
+    compatible) technology, you probably wouldn’t even notice!
+    */
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Benefit: encapsulated classes are easier to debug" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    And finally, encapsulation helps you debug the program when something goes wrong. Often when a program does not work 
+    correctly, it is because one of our member variables has an incorrect value. If everyone is able to access the variable 
+    directly, tracking down which piece of code modified the variable can be difficult (it could be any of them, and you’ll 
+    need to breakpoint them all to figure out which). However, if everybody has to call the same public function to modify a 
+    value, then you can simply breakpoint that function and watch as each caller changes the value until you see where it goes 
+    wrong.
+    */
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Access functions" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    Depending on the class, it can be appropriate (in the context of what the class does) for us to be able to directly get or 
+    set the value of a private member variable.
+
+    An access function is a short public function whose job is to retrieve or change the value of a private member variable. 
+    For example, in a String class, you might see something like this:
+
+    ---->>>> look above main() for 'class OurString'
+    */
+
+    /*
+    getLength() is an access function that simply returns the value of m_length.
+
+    Access functions typically come in two flavors: getters and setters. Getters (also sometimes called accessors) are functions 
+    that return the value of a private member variable. Setters (also sometimes called mutators) are functions that set the 
+    value of a private member variable.
+
+    Here’s a sample class that has getters and setters for all of its members:
+    */
+    Date date;
+
+    date.setDay(5);
+    date.setMonth(12);
+    date.setYear(2021);
+
+    std::cout << "Today is: " << date.getDay() << '/' << date.getMonth() << '/' << date.getYear() << '\n';
+
+    /*
+    The Date class above is essentially an encapsulated data struct with a trivial implementation, and a user of the 
+    class might reasonably expect to be able to get or set the day, month, or year.
+
+    The MyString class above isn’t used just to transport data -- it has more complex functionality and has an invariant 
+    that needs to be maintained. No setter was provided for variable m_length because we don’t want the user to be able to 
+    set the length directly (length should only be set whenever the string is changed). In this class, it does make sense 
+    to allow the user to get the string length directly, so a getter for the length was provided.
+
+    Getters should provide “read-only” access to data. Therefore, the best practice is that they should return by value or 
+    const reference (not by non-const reference). A getter that returns a non-const reference would allow the caller to 
+    modify the actual object being referenced, which violates the read-only nature of the getter (and violates encapsulation).
+
+    Here’s a trivial example of what can happen if your getter returns a non-const reference:
+
+    https://www.learncpp.com/cpp-tutorial/access-functions-and-encapsulation/
+
+    Because getValue() is returning a non-const reference, we can use that reference to modify the value being referenced 
+    (m_value)!
+
+    Best practice
+
+    Getters should return by value or const reference.
+    */
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Access functions concerns" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    There is a fair bit of discussion around in which cases access functions should be used or avoided. Although they 
+    don’t violate encapsulation, some developers would argue that use of access functions violates good OOP class design 
+    (a topic that could easily fill an entire book).
+
+    For now, we’ll recommend a pragmatic approach. As you create your classes, consider the following:
+
+    If nobody outside your class needs to access a member, don’t provide access functions for that member.
+    If someone outside your class needs to access a member, think about whether you can expose a behavior or action instead 
+    (e.g. rather than a setAlive(bool) setter, implement a kill() function instead).
+    If you can’t, consider whether you can provide only a getter.
+    */
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Summary" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    As you can see, encapsulation provides a lot of benefits for just a little bit of extra effort. The primary benefit is that 
+    encapsulation allows us to use a class without having to know how it was implemented. This makes it a lot easier to use 
+    classes we’re not familiar with.
+    */
 
     return 0;
 }
