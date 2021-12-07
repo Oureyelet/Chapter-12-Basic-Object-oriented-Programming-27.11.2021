@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cassert>
+#include <iomanip> // for std::setprecision()
+#include <string>
 
 class Foo
 {
@@ -77,6 +79,89 @@ public:
     }
 
     // No implicit constructor provided because we already defined our own constructor
+};
+
+class Rota
+{
+private:
+    double m_monday{ 7.45 };
+    double m_tuesday{ 7.45 };
+    double m_wednesday{ 7.45 };
+
+public:
+    // Tell the compiler to create a default constructor, even if
+    // there are other user-provided constructors.
+    Rota() = default;
+
+    Rota(double monday, double tuesday, double wednesday)
+    {
+        m_monday = monday;
+        m_tuesday = tuesday;
+        m_wednesday = wednesday;
+    }
+
+    double getTimeMon() { return m_monday; }
+    double getTimeTue() { return m_tuesday; }
+    double getTimeWed() { return m_wednesday; }
+};
+
+class A
+{
+public:
+    A()
+    { 
+        std::cout << "A\n"; 
+    }
+};
+
+class B
+{
+private:
+    A m_a; // B contains A as a member variable
+
+public:
+    B()
+    {
+        std::cout << "B\n";
+    }
+};
+
+class Ball
+{
+private:
+    std::string m_color{};
+    double m_radius{};
+
+public:
+    Ball()
+    {
+        m_color = "black";
+        m_radius = 10.0f;
+    }
+
+    Ball(const std::string &color)
+    {
+        m_radius = 10.0f;
+        m_color = color;
+    }
+
+    Ball(double radius)
+    {
+        m_radius = radius;
+        m_color = "black";
+    }
+
+    Ball(const std::string &color, double radius)
+    {
+        m_color = color;
+        m_radius = radius;
+    }
+
+    void print()
+    {
+        std::cout << "color: " << m_color << ", radius: " << m_radius << '\n';
+    }
+
 };
 
 int main()
@@ -396,7 +481,7 @@ int main()
 
     If your class has any other constructors, the implicitly generated constructor will not be provided. For example:
     */
-    Date_next date{}; // error: Can't instantiate object because default constructor doesn't exist 
+    //Date_next date{}; // error: Can't instantiate object because default constructor doesn't exist 
     //and the compiler won't generate one
 
     Date_next today{ 2020, 1, 19 }; // today is initialized to Jan 19th, 2020
@@ -408,15 +493,140 @@ int main()
     There’s a third option as well: you can use the default keyword to tell the compiler to create a default constructor 
     for us anyway:
     */
+    Rota rota{};// Rota is initialized to mon = 7:45, tue = 7:45, wed = 7:45
+    std::cout << "Monday you will start: " << rota.getTimeMon() << " Tuesday you will start: " <<
+                rota.getTimeTue() << " Wednesday you will start:" << rota.getTimeWed() << '\n';
+
+    std::cout << std::fixed << std::setprecision(2); // for keeping zero after floating point.
+    Rota rota_next_week{ 7.00 , 6.45, 5.45 };// Rota is initialized to mon = 7:00, tue = 6:45, wed = 5:45
+    std::cout << "Monday you will start: " << rota_next_week.getTimeMon() << " Tuesday you will start: " <<
+                rota_next_week.getTimeTue() << " Wednesday you will start:" << rota_next_week.getTimeWed() << '\n';
+
+    /*
+    Using = default is longer than writing a constructor with an empty body, but expresses better what your 
+    intentions are (To create a default constructor), and it’s safer, because it can zero-initialize members even 
+    if they have not been initialized at their declaration. = default also works for other special constructors, 
+    which we’ll talk about in the future.
+
+    Best practice:
+
+    If you have constructors in your class and need a default constructor that does nothing (e.g. because all 
+    your members are initialized using non-static member initialization), use = default.
+    */
 
 
     std::cout << std::endl;
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
-    std::cout << "An implicitly generated default constructor" << '\n';
+    std::cout << "Classes containing classes" << '\n';
     std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /*
+    A class may contain other classes as member variables. By default, when the outer class is constructed, the member 
+    variables will have their default constructors called. This happens before the body of the constructor executes.
+
+    This can be demonstrated thusly:
+    */
+    B b; // This prints: A B
+
+    /*
+    When variable b is constructed, the B() constructor is called. Before the body of the constructor executes, m_a is 
+    initialized, calling the class A default constructor. This prints “A”. Then control returns back to the B constructor, 
+    and the body of the B constructor executes.
+
+    This makes sense when you think about it, as the B() constructor may want to use variable m_a -- so m_a had better be 
+    initialized first!
+
+    The difference to the last example in the previous section is that m_a is a class-type. class-type members get 
+    initialized even if we don’t explicitly initialize them.
+
+    In the next lesson, we’ll talk about how to initialize these class member variables.
+    */
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Constructor notes" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    Many new programmers are confused about whether constructors create the objects or not. They do not -- the compiler sets 
+    up the memory allocation for the object prior to the constructor call.
+
+    Constructors actually serve two purposes. First, constructors determine who is allowed to create an object. That is, an 
+    object of a class can only be created if a matching constructor can be found.
+
+    Second, constructors can be used to initialize objects. Whether the constructor actually does an initialization is up to 
+    the programmer. It’s syntactically valid to have a constructor that does no initialization at all (the constructor still 
+    serves the purpose of allowing the object to be created, as per the above).
+
+    However, much like it is a best practice to initialize all local variables, it’s also a best practice to initialize all 
+    member variables on creation of the object. This can be done via a constructor or via non-static member initialization.
+
+    Best practice
+
+    Always initialize all member variables in your objects.
+
+    Finally, constructors are only intended to be used for initialization when the object is created. You should not try to 
+    call a constructor to re-initialize an existing object. While it may compile, the results will not be what you intended 
+    (instead, the compiler will create a temporary object and then discard it).
+    */
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Quiz Time !" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    Question #1
+
+    Write a class named Ball. Ball should have two private member variables with default values: m_color (“black”) and 
+    m_radius (10.0). Ball should provide constructors to set only m_color, set only m_radius, set both, or set neither 
+    value. For this quiz question, do not use default parameters for your constructors. Also write a function to print 
+    out the color and radius of the ball.
+
+    The following sample program should compile:
+
+    int main()
+    {
+        Ball def{};
+        def.print();
+
+        Ball blue{ "blue" };
+        blue.print();
+
+        Ball twenty{ 20.0 };
+        twenty.print();
+
+        Ball blueTwenty{ "blue", 20.0 };
+        blueTwenty.print();
+
+        return 0;
+    }
+
+    and produce the result:
+
+    color: black, radius: 10
+    color: blue, radius: 10
+    color: black, radius: 20
+    color: blue, radius: 20
+    */
+
+    Ball def{};
+    def.print();
+
+    Ball blue{ "blue" };
+    blue.print();
+
+    Ball twenty{ 20.0 };
+    twenty.print();
+
+    Ball bluetwenty{ "blue", 20.0 };
+    bluetwenty.print();
+    
 
 
     return 0;
