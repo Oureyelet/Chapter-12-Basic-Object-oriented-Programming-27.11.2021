@@ -39,6 +39,30 @@ public:
     }
 };
 
+class Simple
+{
+private:
+    int m_nID{};
+
+public:
+    Simple(int nID) : m_nID{ nID }
+    {
+        std::cout << "Constructing Simple " << nID << '\n';
+    }
+
+    ~Simple()
+    {
+        std::cout << "Destructing Simple " << m_nID << '\n'; 
+    }
+
+    int getID()
+    {
+        return m_nID; 
+    }
+};
+
+
+
 int main()
 {
     std::cout << std::endl;
@@ -121,8 +145,97 @@ int main()
 
     std::cout << "The value of element 5 is: " << ar.getValue(5) << '\n';
 
+    /*
+    On the first line, we instantiate a new IntArray class object called ar, and pass in a length of 10. This calls the 
+    constructor, which dynamically allocates memory for the array member. We must use dynamic allocation here because we 
+    do not know at compile time what the length of the array is (the caller decides that).
+
+    At the end of main(), ar goes out of scope. This causes the ~IntArray() destructor to be called, which deletes the array 
+    that we allocated in the constructor!
+
+    A reminder
+
+    In lesson 10.23 -- An introduction to std::vector, we note that parenthesis based initialization should be used when 
+    initializing an array/container/list class with a length (as opposed to a list of elements). For this reason, we 
+    initialize IntArray using IntArray ar ( 10 );.
+    */
 
 
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Constructor and destructor timing" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    As mentioned previously, the constructor is called when an object is created, and the destructor is called when an 
+    object is destroyed. In the following example, we use cout statements inside the constructor and destructor to show this:
+    */
+
+    // Allocate a Simple on the stack
+    Simple simple{ 1 };
+    std::cout << simple.getID() << '\n';
+
+    // Allocate a Simple dynamically
+    Simple* pSimple{ new Simple{ 2 } };
+    std::cout << pSimple->getID() << '\n';
+
+    // We allocated pSimple dynamically, so we have to delete it.
+    delete pSimple;
+
+    /*
+    Note that “Simple 1” is destroyed after “Simple 2” because we deleted pSimple before the end of the function, 
+    whereas simple was not destroyed until the end of main().
+
+    Global variables are constructed before main() and destroyed after main().
+    */
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "RAII" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    RAII (Resource Acquisition Is Initialization) is a programming technique whereby resource use is tied to the lifetime of 
+    objects with automatic duration (e.g. non-dynamically allocated objects). In C++, RAII is implemented via classes with 
+    constructors and destructors. A resource (such as memory, a file or database handle, etc…) is typically acquired in the 
+    object’s constructor (though it can be acquired after the object is created if that makes sense). That resource can then 
+    be used while the object is alive. The resource is released in the destructor, when the object is destroyed. The primary 
+    advantage of RAII is that it helps prevent resource leaks (e.g. memory not being deallocated) as all resource-holding 
+    objects are cleaned up automatically.
+
+    The IntArray class at the top of this lesson is an example of a class that implements RAII -- allocation in the constructor, 
+    deallocation in the destructor. std::string and std::vector are examples of classes in the standard library that follow 
+    RAII -- dynamic memory is acquired on initialization, and cleaned up automatically on destruction.
+    */
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "A warning about the exit() function" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    Note that if you use the exit() function, your program will terminate and no destructors will be called. Be wary if you’re 
+    relying on your destructors to do necessary cleanup work (e.g. write something to a log file or database before exiting).
+    */
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Summary" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    As you can see, when constructors and destructors are used together, your classes can initialize and clean up after 
+    themselves without the programmer having to do any special work! This reduces the probability of making an error, and 
+    makes classes easier to use.
+    */
 
     return 0;
 }// ar is destroyed here, so the ~IntArray() destructor function is called here
+// simple goes out of scope here
