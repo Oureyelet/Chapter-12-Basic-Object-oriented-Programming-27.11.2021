@@ -1,5 +1,5 @@
-#ifndef DATE_H
-#define DATE_H
+#ifndef ROTA_H
+#define ROTA_H
 
 class Rota
 {
@@ -9,14 +9,16 @@ private:
     int m_wednesday{};
 
 public:
+    Rota();
+
     Rota(int mon, int tue, int wed);
 
     void SetRota(int mon, int tue, int wed);
 
-    int getMon() { return m_monday; }
-    int getTue() { return m_tuesday; }
-    int getWed() { return m_wednesday; }
+    int getMon() const;
+    int getTue() const; 
+    int getWed() const; 
 };
 
-#endif // end DATE_H
+#endif // end ROTA_H
 
