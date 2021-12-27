@@ -1,4 +1,6 @@
 #include <iostream>
+#include <array>
+#include "test.cpp"
 
 int generateID()
 {
@@ -32,6 +34,27 @@ private:
 
 double Date::s_monday{ 6.45 }; // defines the static member variable (we'll discuss this section below)
 
+class Holiday
+{
+private:
+    static int s_idGenerator;
+    int m_id;
+
+public:
+    Holiday()
+    {
+        m_id = s_idGenerator++; // grab the next value from the id generator
+    }
+
+    int getID() const 
+    {
+        return m_id; 
+    }
+};
+
+// Note that we're defining and initializing s_idGenerator even though it is declared as private above.
+// This is okay since the definition isn't subject to access controls.
+int Holiday::s_idGenerator{ 1 }; // start our ID generator with value 1
 
 int main()
 {
@@ -163,6 +186,68 @@ int main()
     class (e.g. Something.cpp). If the class is defined in a .cpp file, the static member definition is usually placed 
     directly underneath the class. Do not put the static member definition in a header file (much like a global variable, 
     if that header file gets included more than once, you’ll end up with multiple definitions, which will cause a linker error).
+    */
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Inline initialization of static member variables" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    There are a few shortcuts to the above. First, when the static member is a const integral type 
+    (which includes char and bool) or a const enum, the static member can be initialized inside the class definition:
+    */
+    //see our TEST class >>>>
+
+    Test test_1{};
+    std::cout << test_1.print() << '\n';
+
+    /*
+    TEST:
+    */
+    Test test;
+    std::cout << test.s_test << '\n';
+
+    /*
+    In the above example, because the static member variable is a const int, no explicit definition line is needed.
+
+    Second, static constexpr members can be initialized inside the class definition:
+    */
+    for(auto& elemment : test.s_array)
+    {
+        std::cout << elemment << '\n';
+    }
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "An example of static member variables" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    Why use static variables inside classes? One great example is to assign a unique ID to every instance of the class. 
+    Here’s an example of that:
+    */
+    Holiday january;
+    Holiday february;
+    Holiday march;
+
+    std::cout << january.getID() << '\n';
+    std::cout << february.getID() << '\n';
+    std::cout << march.getID() << '\n';
+
+    /*
+    Because s_idGenerator is shared by all Something objects, when a new Something object is created, the constructor grabs 
+    the current value out of s_idGenerator and then increments the value for the next object. This guarantees that each 
+    instantiated Something object receives a unique id (incremented in the order of creation). This can really help when 
+    debugging multiple items in an array, as it provides a way to tell multiple objects of the same class type apart!
+
+    Static member variables can also be useful when the class needs to utilize an internal lookup table (e.g. an array 
+    used to store a set of pre-calculated values). By making the lookup table static, only one copy exists for all objects, 
+    rather than making a copy for each object instantiated. This can save substantial amounts of memory.
     */
 
     return 0;
