@@ -1,6 +1,8 @@
 #ifndef POINT_H
 #define POINT_H
 
+class Vector3d;
+
 class Point3d
 {
 private:
@@ -9,10 +11,8 @@ private:
 	double m_z{};
 
 public:
-	Point3d(double x = 0.0, double y = 0.0, double z = 0.0);
-
+	Point3d(double, double, double);
 	void print() const;
-
 	void moveByVector(const Vector3d& v);
 };
 
