@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cmath> // for std::sqrt
+#include <string> // for std::string
+#include <string_view>
 
 class Point2d
 {
@@ -23,6 +25,93 @@ public:
     {
         return std::sqrt((m_x - distance.m_x) * (m_x - distance.m_x) + (m_y - distance.m_y) * (m_y - distance.m_y));
     }
+
+    friend double distanceFrom(const Point2d& first, const Point2d& second);
+};
+
+double distanceFrom(const Point2d& first, const Point2d& second)
+{
+    return std::sqrt((first.m_x - second.m_x) * (first.m_x - second.m_x) + 
+                    (first.m_y - second.m_y) * (first.m_y - second.m_y));
+}
+
+class HelloWorld
+{
+private:
+	char* m_data{};
+
+public:
+	HelloWorld()
+	{
+		m_data = new char[14];
+		const char* init{ "Hello, World!" };
+		for (int i = 0; i < 14; ++i)
+			m_data[i] = init[i];
+	}
+
+	~HelloWorld()
+	{
+        // replace this comment with your destructor implementation
+        delete[] m_data;
+	}
+
+	void print() const
+	{
+		std::cout << m_data << '\n';
+	}
+
+};
+
+class Monster
+{
+public:
+    enum class Type
+    {
+        dragon = 1,
+        goblin = 2,
+        ogre = 3,
+        orc = 4,
+        skeleton = 5,
+        troll = 6,
+        vampire = 7,
+        zombie = 8,
+
+        max_monster_types = 9
+    };
+
+private:
+    Type m_type{};
+    std::string m_name{};
+    std::string m_roar{};
+    int m_hp{};
+
+public:
+    Monster(Type type, std::string name, std::string roar, int hp)
+        : m_type{ type }, m_name{ name }, m_roar{ roar }, m_hp{ hp }
+    {
+    }
+
+    std::string_view getTypeString() const
+    {
+        switch (m_type)
+        {
+        case Type::dragon: return " the dragon ";
+        case Type::goblin: return " the goblin ";
+        case Type::ogre: return " the ogre ";
+        case Type::orc: return " the orc ";
+        case Type::skeleton: return " the skeleton ";
+        case Type::troll: return " the troll ";
+        case Type::vampire: return " the vampire ";
+        case Type::zombie: return " the zombie ";
+        default: return "???";
+        }
+    }
+
+    void print()
+    {
+        std::cout << m_name << getTypeString() << "has " << m_hp << " hit points and says " << m_roar << '\n';
+    }
+
 };
 
 int main()
@@ -93,11 +182,10 @@ int main()
     std::cout << std::endl;
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
-    std::cout << "Quiz time" << '\n';
+    std::cout << "Quiz time Question #1" << '\n';
     std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /*
-    Question #1
 
     a) Write a class named Point2d. Point2d should contain two member variables of type double: m_x, and m_y, 
     both defaulted to 0.0. Provide a constructor and a print function.
@@ -147,6 +235,89 @@ int main()
 
     The following program should run:
     */
+    Point2d first3{};
+    Point2d second3{ 3.0, 4.0 };
+    first3.print();
+    second3.print();
+    std::cout << "Distance between two points: " << distanceFrom(first3, second3) << '\n';
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Quiz time Question #2" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    Write a destructor for this class:
+
+    #include <iostream>
+
+    class HelloWorld
+    {
+    private:
+        char* m_data{};
+
+    public:
+        HelloWorld()
+        {
+            m_data = new char[14];
+            const char* init{ "Hello, World!" };
+            for (int i = 0; i < 14; ++i)
+                m_data[i] = init[i];
+        }
+
+        ~HelloWorld()
+        {
+            // replace this comment with your destructor implementation
+        }
+
+        void print() const
+        {
+            std::cout << m_data << '\n';
+        }
+
+    };
+
+    int main()
+    {
+        HelloWorld hello{};
+        hello.print();
+
+        return 0;
+    }
+    */
+    HelloWorld hello{};
+	hello.print();
+
+
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Quiz time Question #3" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    Let’s create a random monster generator. This one should be fun.
+
+    a) First, let’s create an enumeration of monster types named MonsterType. Include the following monster types: Dragon, 
+    Goblin, Ogre, Orc, Skeleton, Troll, Vampire, and Zombie. Add an additional max_monster_types enum so we can count 
+    how many enumerators there are.
+    */
+
+    /*
+    c) enum MonsterType is specific to Monster, so move the enum inside the class as a public declaration. 
+    When the enum is inside the class the “Monster” in “MonsterType” is redundant, it can be removed.
+    */
+    Monster skeleton{ Monster::Type::skeleton, "Bones", "*rattle*", 4 };
+
+    /*
+    e) Now we want to be able to print our monster so we can validate it’s correct. To do that, we’re going to need to 
+    write a function that converts a Monster::Type into a string. Write that function (called getTypeString()), as well 
+    as a print() member function.
+    */
+    Monster troll{ Monster::Type::troll, "Trolek", "*bla bla bla bla*", 133 };
+    troll.print();
 
 
 
