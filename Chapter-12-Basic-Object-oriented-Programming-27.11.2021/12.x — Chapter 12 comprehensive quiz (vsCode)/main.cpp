@@ -2,6 +2,10 @@
 #include <cmath> // for std::sqrt
 #include <string> // for std::string
 #include <string_view>
+#include "random.hpp"
+
+// get base random alias which is auto seeded and has static API and internal state
+using Random = effolkronium::random_static;
 
 class Point2d
 {
@@ -112,6 +116,20 @@ public:
         std::cout << m_name << getTypeString() << "has " << m_hp << " hit points and says " << m_roar << '\n';
     }
 
+};
+
+class MonsterGenerator
+{
+public:
+
+    static Monster generateMonster()
+    {
+        return { static_cast<Monster::Type>( Random::get(1, 8) ),
+                 "Bones",
+                 "*rattle*",
+                 static_cast<int>( Random::get(1, 100) ) 
+                };
+    }
 };
 
 int main()
@@ -318,6 +336,26 @@ int main()
     */
     Monster troll{ Monster::Type::troll, "Trolek", "*bla bla bla bla*", 133 };
     troll.print();
+
+    /*
+    f) Now we can create a random monster generator. Let’s consider how our MonsterGenerator class will work. Ideally, 
+    we’ll ask it to give us a Monster, and it will create a random one for us. We don’t need more than one MonsterGenerator. 
+    This is a good candidate for a static class (one in which all functions are static). Create a static MonsterGenerator class. 
+    Create a static function named generateMonster(). This should return a Monster. For now, make it return anonymous 
+    Monster(Monster::Type::skeleton, “Bones”, “rattle“, 4);
+    */
+    Monster m{ MonsterGenerator::generateMonster() };
+	//m.print();
+
+    /*
+    g) Now, MonsterGenerator needs to generate some random attributes. To do that, we’ll need to make use of this handy function:
+    */
+    for(int i{ 1 }; i < 20; ++i)
+    {
+        m.print();
+    }
+
+    
 
 
 
