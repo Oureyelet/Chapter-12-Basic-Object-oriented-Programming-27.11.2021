@@ -124,9 +124,16 @@ public:
 
     static Monster generateMonster()
     {
-        return { static_cast<Monster::Type>( Random::get(1, 8) ),
-                 "Bones",
-                 "*rattle*",
+        int mm{ static_cast<int>(Monster::Type::max_monster_types) };
+
+        static constexpr std::array s_names{ "Frodo", "Gandalf", "Sam", "Matt", "Gigi", "Olaf"};
+        static constexpr std::array<const char*, 6> s_roars{ "*eloeloeloeloelo*", "*777777777*", "*aaaaaaaaaa*", 
+                                                    "*6y6y6y6y6y*", "*xcxcxcxcxc*", "*frfrfrfrfr*"};
+        
+
+        return { static_cast<Monster::Type>( Random::get(1, (mm-1))),
+                 s_names[Random::get(0, 5)],
+                 s_roars[Random::get(0, 5)],
                  static_cast<int>( Random::get(1, 100) ) 
                 };
     }
@@ -345,18 +352,37 @@ int main()
     Monster(Monster::Type::skeleton, “Bones”, “rattle“, 4);
     */
     Monster m{ MonsterGenerator::generateMonster() };
-	//m.print();
+	m.print();
 
     /*
     g) Now, MonsterGenerator needs to generate some random attributes. To do that, we’ll need to make use of this handy function:
     */
-    for(int i{ 1 }; i < 20; ++i)
-    {
-        m.print();
-    }
+   
+    /*
+    h) Now edit function generateMonster() to generate a random Monster::Type (between 0 and 
+    Monster::Type::max_monster_types-1) and a random hit points (between 1 and 100). This should be fairly straightforward. 
+    Once you’ve done that, define two static fixed arrays of size 6 inside the function (named s_names and s_roars) and 
+    initialize them with 6 names and 6 sounds of your choice. Pick a random name and roar from these arrays.
+    */
+    Monster m1{ MonsterGenerator::generateMonster() };
+    m1.print();
+    Monster m2{ MonsterGenerator::generateMonster() };
+    m2.print();
+    Monster m3{ MonsterGenerator::generateMonster() };
+    m3.print();
+    Monster m4{ MonsterGenerator::generateMonster() };
+    m4.print();
 
-    
 
+    std::cout << std::endl;
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    std::cout << "Question #4" << '\n';
+    std::cout << "//////////////////////////////////////////////////////////////////////////////////////////" << '\n';
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /*
+    see our Question #4.cpp please...
+    */
 
 
     return 0;
