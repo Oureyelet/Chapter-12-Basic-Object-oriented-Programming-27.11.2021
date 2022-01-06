@@ -1,10 +1,17 @@
 #ifndef CLASSES_H
 #define CLASSES_H
 
+#include <iostream>
+#include <cassert>
+#include <array>
+
+using deck_type = std::array<int, 52>;
+using index_type = deck_type::size_type;
+
 class Card
 {
 public:
-    enum class CardSuit
+    enum class Suit
     {
         club,
         diamond,
@@ -14,7 +21,7 @@ public:
         max_suits
     };
 
-    enum class CardRank
+    enum class Rank
     {
         rank_2,
         rank_3,
@@ -34,16 +41,40 @@ public:
     };
 
 private:
-    CardRank m_rank{};
-    CardSuit m_suit{};
+    Rank m_rank{};
+    Suit m_suit{};
 
 public:
-    Card(CardSuit suit = Card::CardSuit::club, CardRank rank = Card::CardRank::rank_2)
-        : m_suit{ suit }, m_rank{ rank }
-    {
+    Card(Rank rank, Suit suit);
+    Card();
 
-    }
+    void print() const;
+    int value() const;
     
 };
+
+
+
+class Deck
+{
+private:
+    deck_type m_deck;
+
+public:
+    //Constructor:
+    Deck()
+    {
+        //m_deck
+    }
+
+    friend class Card;
+
+    deck_type createDeck();
+
+
+
+    
+};
+
 
 #endif // end CLASSES_H.
