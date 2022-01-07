@@ -1,8 +1,5 @@
 #include "Classes.h"
 
-using deck_type = std::array<int, 52>;
-using index_type = deck_type::size_type;
-
 Card::Card(Rank rank, Suit suit)
     : m_suit{ suit }, m_rank{ rank }
 {
@@ -14,7 +11,7 @@ Card::Card()
     m_suit = Suit::club;
 }
 
-void Card::print() const
+void Card::printCard() const
 {
     switch (m_rank)
     {
@@ -71,21 +68,27 @@ int Card::value() const
     }
 }
 
-deck_type Deck::createDeck()
+Deck::Deck()
 {
-  
+    std::array<Card, 52>::size_type index{ 0 };
 
-  index_type index{ 0 };
-
-  for (int suit{ 0 }; suit < static_cast<int>(Card::Suit::max_suits); ++suit)
-  {
-    for (int rank{ 0 }; rank < static_cast<int>(Card::Rank::max_ranks); ++rank)
+    for (int suit{ 0 }; suit < static_cast<int>(Card::Suit::max_suits); ++suit)
     {
-      Deck::m_deck[index].suit = static_cast<Card::Suit>(suit);
-      Deck::m_deck[index].rank = static_cast<Card::Rank>(rank);
-      ++index;
+        for (int rank{ 0 }; rank < static_cast<int>(Card::Rank::max_ranks); ++rank)
+        {
+            Deck::m_deck[index] = { static_cast<Card::Rank>(rank), static_cast<Card::Suit>(suit) };
+            ++index;
+        }
     }
-  }
+}
 
-  return Deck::m_deck;
+void Deck::printDeck(const Deck& deck)
+{
+    for (const auto& card : deck)
+    {
+        //Card::printCard().deck;
+        std::cout << ' ';
+    }
+
+    std::cout << '\n';
 }

@@ -5,8 +5,13 @@
 int main()
 {
     const Card cardQueenHearts{ Card::Rank::rank_queen, Card::Suit::heart };
-    cardQueenHearts.print();
+    cardQueenHearts.printCard();
     std::cout << " has the value " << cardQueenHearts.value() << '\n';
+
+    Deck deck{};
+    deck.printCard();
+    deck.shuffle();
+    deck.printCard();
 
     return 0;
 }

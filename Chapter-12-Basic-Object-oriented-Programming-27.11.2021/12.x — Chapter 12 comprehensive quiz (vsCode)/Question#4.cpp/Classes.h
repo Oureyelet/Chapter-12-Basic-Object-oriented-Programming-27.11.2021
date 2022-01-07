@@ -5,9 +5,6 @@
 #include <cassert>
 #include <array>
 
-using deck_type = std::array<int, 52>;
-using index_type = deck_type::size_type;
-
 class Card
 {
 public:
@@ -48,7 +45,7 @@ public:
     Card(Rank rank, Suit suit);
     Card();
 
-    void print() const;
+    void printCard() const;
     int value() const;
     
 };
@@ -58,21 +55,17 @@ public:
 class Deck
 {
 private:
-    deck_type m_deck;
+    std::array<Card, 52> m_deck;
 
 public:
     //Constructor:
-    Deck()
-    {
-        //m_deck
-    }
+    Deck();
 
     friend class Card;
 
-    deck_type createDeck();
+    friend void Card::printCard()const;
 
-
-
+    void printDeck(const Deck& deck);
     
 };
 
