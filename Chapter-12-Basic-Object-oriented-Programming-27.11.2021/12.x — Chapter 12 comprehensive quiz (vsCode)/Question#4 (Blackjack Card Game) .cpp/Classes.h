@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cassert>
 #include <array>
+#include <random> // for std::mt19937
+#include <algorithm> // for std::shuffle
 
 class Card
 {
@@ -56,6 +58,7 @@ class Deck
 {
 private:
     std::array<Card, 52> m_deck;
+    int m_cardIndex{ 0 };
 
 public:
     //Constructor:
@@ -65,8 +68,30 @@ public:
 
     friend void Card::printCard()const;
 
-    void printDeck(const Deck& deck);
+    void printDeck();
+
+    void shuffleDeck();
+
+    const Card& dealCard();
     
+};
+
+class Player
+{
+public:
+    int m_PlayerScore{};
+    const int m_maximumScore{ 21 };
+    const int m_minimumDealerScore{ 17 };
+
+    bool isBust();
+
+    const Deck& drawCard(Deck& deck)
+    {
+        Card::value
+    }
+
+
+    bool playerWantsHit();
 };
 
 

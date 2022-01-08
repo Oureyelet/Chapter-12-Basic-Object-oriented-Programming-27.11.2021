@@ -1,15 +1,15 @@
 #include "Classes.h"
+#include <random> // for std::mt19937
+#include <algorithm> // for std::shuffle
+#include <iostream>
+#include <cassert>
 
 Card::Card(Rank rank, Suit suit)
     : m_suit{ suit }, m_rank{ rank }
 {
 }
 
-Card::Card()
-{
-    m_rank = Rank::rank_2;
-    m_suit = Suit::club;
-}
+Card::Card() = default;
 
 void Card::printCard() const
 {
@@ -82,13 +82,58 @@ Deck::Deck()
     }
 }
 
-void Deck::printDeck(const Deck& deck)
+void Deck::printDeck()
 {
-    for (const auto& card : deck)
+    for (auto& card : Deck::m_deck)
     {
-        //Card::printCard().deck;
+        card.printCard();
         std::cout << ' ';
     }
 
     std::cout << '\n';
+}
+
+void Deck::shuffleDeck()
+{
+    static std::mt19937 mt{ static_cast<std::mt19937::result_type>(std::time(nullptr)) };
+
+    std::shuffle(Deck::m_deck.begin(), Deck::m_deck.end(), mt);
+}
+
+const Card& Deck::dealCard()
+{
+    assert(m_cardIndex < Deck::m_deck.size());
+
+    return Deck::m_deck[m_cardIndex++];
+}
+
+
+
+bool Player::playerWantsHit()
+{
+    while (true)
+    {
+        std::cout << "(h) to hit, or (s) to stand: ";
+
+        char ch{};
+        std::cin >> ch;
+
+        switch (ch)
+        {
+        case 'h':
+            return true;
+        case 's':
+            return false;
+        }
+    }
+}
+
+bool Player::isBust()
+{
+    if(Player::m_PlayerScore > Player::m_maximumScore)
+    {
+        return true;
+    }
+    else
+        return false; 
 }
