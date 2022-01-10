@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cassert>
 
+constexpr int maximumScore{ 21 };
+
 Card::Card(Rank rank, Suit suit)
     : m_suit{ suit }, m_rank{ rank }
 {
@@ -107,33 +109,19 @@ const Card& Deck::dealCard()
     return Deck::m_deck[m_cardIndex++];
 }
 
-
-
-bool Player::playerWantsHit()
+bool Player::isBust() const
 {
-    while (true)
-    {
-        std::cout << "(h) to hit, or (s) to stand: ";
-
-        char ch{};
-        std::cin >> ch;
-
-        switch (ch)
-        {
-        case 'h':
-            return true;
-        case 's':
-            return false;
-        }
-    }
+    return(Player::m_PlayerScore > ::maximumScore);
 }
 
-bool Player::isBust()
+int Player::drawCard(Deck& deck)
 {
-    if(Player::m_PlayerScore > Player::m_maximumScore)
-    {
-        return true;
-    }
-    else
-        return false; 
+    int value = deck.dealCard().value();
+    m_PlayerScore += value;
+    return value;
+}
+
+int Player::score() const
+{
+    return m_PlayerScore;
 }

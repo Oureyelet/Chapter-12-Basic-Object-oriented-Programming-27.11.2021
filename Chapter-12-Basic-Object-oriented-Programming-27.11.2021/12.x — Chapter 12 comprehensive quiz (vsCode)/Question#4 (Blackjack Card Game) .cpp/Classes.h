@@ -78,20 +78,14 @@ public:
 
 class Player
 {
-public:
+private:
     int m_PlayerScore{};
-    const int m_maximumScore{ 21 };
-    const int m_minimumDealerScore{ 17 };
 
-    bool isBust();
+public:
 
-    const Deck& drawCard(Deck& deck)
-    {
-        Card::value
-    }
-
-
-    bool playerWantsHit();
+    bool isBust()const;
+    int drawCard(Deck& deck);
+    int score() const;
 };
 
 
